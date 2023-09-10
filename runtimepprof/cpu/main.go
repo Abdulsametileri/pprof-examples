@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"math/rand"
 	"os"
@@ -25,26 +24,18 @@ func main() {
 
 //go:noinline
 func expensiveFunc() {
-	label := pprof.Labels("expensiveFunc", "sum of values at length of 10m")
-
-	pprof.Do(context.Background(), label, func(_ context.Context) {
-		var sum float64
-		for i := 0; i < 10_000_000; i++ {
-			sum += rand.Float64()
-		}
-	})
+	var sum float64
+	for i := 0; i < 10_000_000; i++ {
+		sum += rand.Float64()
+	}
 
 	anotherExpensiveFunc()
 }
 
 //go:noinline
 func anotherExpensiveFunc() {
-	label := pprof.Labels("anotherExpensiveFunc", "sum of values at length of 1m")
-
-	pprof.Do(context.Background(), label, func(ctx context.Context) {
-		var sum int
-		for i := 0; i < 1_000_000; i++ {
-			sum += rand.Intn(10)
-		}
-	})
+	var sum int
+	for i := 0; i < 1_000_000; i++ {
+		sum += rand.Intn(10)
+	}
 }
